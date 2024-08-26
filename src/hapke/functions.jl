@@ -41,5 +41,5 @@ function h_function_2(
 end
 
 function double_henyey_greenstein(cos_g, b::Float64=0.21, c::Float64=0.7)
-    p_g = (1 + c) / 2 * (1 - b^2) / (1 - 2 * b * cos_g + b^2)^(1.5) + (1 - c) / 2 * (1 - b^2) / (1 + 2 * b * cos_g + b^2)^(1.5)
+    p_g = (1 + c) / 2 * (1 - b^2) ./ (1 .- 2 * b .* cos_g .+ b^2) .^ 1.5 + (1 - c) / 2 * (1 - b^2) ./ (1 .+ 2 * b .* cos_g .+ b^2) .^ 1.5
 end
