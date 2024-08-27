@@ -47,7 +47,7 @@ jobs:
       - uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - run: julia -e 'using Pkg; Pkg.add("TestReports"); using TestReports; TestReports.test("RefMod")'
+      - run: julia -e 'using Pkg; Pkg.activate("."); Pkg.add("TestReports"); using TestReports; TestReports.test("RefMod")'
       - uses: codecov/test-results-action@v1
         if: ${{ !cancelled() }}
         with:
