@@ -8,3 +8,4 @@ Reflectance models implemented in julia
 
 - [ ] Write documentation
 - [ ] Create a docs folder using [Documenter.jl](https://documenter.juliadocs.org/stable/)
+- [ ] Implement recommendations from [this](https://scientificcoder.com/automate-your-code-quality-in-julia) guide
