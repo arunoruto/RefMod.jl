@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/github/arunoruto/refmod.jl/graph/badge.svg?token=171D3VZ48C)](https://codecov.io/github/arunoruto/refmod.jl)
+
 # refmod.jl
 
 Reflectance models implemented in julia
