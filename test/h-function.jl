@@ -18,5 +18,7 @@ ground_truth = CSV.read(joinpath(datadir, "h-function.csv"), DataFrame)
         @test isapprox(h, ground_truth.h; rtol=8e-3)
     end
 
-    @test_throws ArgumentError h_function(ground_truth.mu, ground_truth.w, 3)
+    @testset "Errors" begin
+        @test_throws ArgumentError h_function(ground_truth.mu, ground_truth.w, 3)
+    end
 end
