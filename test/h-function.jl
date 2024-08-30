@@ -1,5 +1,3 @@
-using CSV, DataFrames
-
 include("../src/hapke/functions.jl")
 
 datadir = joinpath(@__DIR__, "data")

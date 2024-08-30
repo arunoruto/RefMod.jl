@@ -1,5 +1,3 @@
-using FITSIO
-
 include("../src/hapke/roughness.jl")
 
 datadir = joinpath(@__DIR__, "data")
