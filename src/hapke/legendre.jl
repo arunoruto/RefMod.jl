@@ -25,18 +25,21 @@ function function_p(
 )
     a_n = coef_a(n)
     b_n = coef_b(b, c, n)
+
     previous_2 = ones(size(x))
     previous_1 = x
-    res = previous_2
 
-    for i in 1:(n+1)
-        res += a_n[i] * b_n[i] .* previous_1
+    res = a_n[1] * b_n[1] .* previous_2
+    res += a_n[2] * b_n[2] .* previous_1
+
+    for i in 2:n
         temp = previous_1
-        previous_1 = (2 - 1 / i) .* x .* previous_1 - (1 - 1 / i) .* previous_1
+        previous_1 = (2 - 1 / i) .* x .* previous_1 - (1 - 1 / i) .* previous_2
         previous_2 = temp
+        res += a_n[i+1] * b_n[i+1] .* previous_1
     end
 
-    return res
+    return 1 .+ res
 end
 
 function value_p(
@@ -47,5 +50,5 @@ function value_p(
     a_n = coef_a(n)
     b_n = coef_b(b, c, n)
     # TODO: Change 1+ to 1-... Maybe?
-    return 1 + sum(a_n .^ 2 .* b_n)
+    return 1 + sum(@. a_n^2 * b_n)
 end

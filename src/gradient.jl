@@ -1,4 +1,4 @@
-function gradient(F, h = missing)
+function gradient(F, h=missing)
     G = zeros((ndims(F), size(F)...))
     for i = 1:ndims(F)
         l = size(F, i)
@@ -9,7 +9,7 @@ function gradient(F, h = missing)
         selectdim(G, 1, i) .= grad_i
     end
 
-    G = reverse(G, dims = 1)
+    G = reverse(G, dims=1)
 
     if !ismissing(h)
         if (ndims(h) == 0) || ((ndims(h) == 1) && (length(h) <= 2))
@@ -20,4 +20,16 @@ function gradient(F, h = missing)
     end
 
     return (selectdim(G, 1, i) for i = 1:size(G, 1))
+end
+
+function normals(data, resolution::Float64=1.0, normalize::Bool=false)
+    q, p = gradient(data, resolution)
+
+    n = cat(-p, -q, ones(size(p)), dims=3)
+
+    if normalize
+        n ./= sqrt.(sum(abs2, n, dims=3))
+    end
+
+    return n
 end
