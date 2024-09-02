@@ -27,5 +27,6 @@ datadir = joinpath(@__DIR__, "data")
         result = read(data["result"])
 
         @test isapprox(refl, result)
+        @test_throws ArgumentError amsa(albedo, i, e, n, Dict("a"=>header["B"], "d"=>header["C"]), tb, hs, bs0, hc, bc0)
     end
 end
