@@ -50,24 +50,26 @@ function microscopic_roughness(
 
     f_exp(x, y) = exp.(-x .* 2 * y / pi)
     f_exp_2(x, y) = exp.(-x .^ 2 .* y^2 / pi)
-    prime_term(cos_x, sin_x, cot_r, cos_psi, sin_psi_div_2_sq, psi, cot_a, cot_b, cot_c, cot_d, index) = ifelse.(index, cos_x .+ sin_x ./ cot_r .* (cos_psi .* f_exp_2(cot_a, cot_r) .+ sin_psi_div_2_sq .* f_exp_2(cot_b, cot_r)) ./ (2 .- f_exp(cot_c, cot_r) .- psi ./ pi .* f_exp(cot_d, cot_r)), 0.0)
-    prime_zero_term(cos_x, sin_x, cot_x, cot_r) = cos_x .+ sin_x ./ cot_r .* f_exp_2(cot_x, cot_r) ./ (2 .- f_exp(cot_x, cot_r))
+    prime_term(cos_x, sin_x, cot_r, cos_psi, sin_psi_div_2_sq, psi, cot_a, cot_b, index) = @. ifelse(index, cos_x + sin_x / cot_r * (cos_psi * f_exp_2(cot_a, cot_r) + sin_psi_div_2_sq * f_exp_2(cot_b, cot_r)) / (2 - f_exp(cot_a, cot_r) - psi / pi * f_exp(cot_b, cot_r)), 0.0)
+    # prime_zero_term(cos_x, sin_x, cot_x, cot_r) = cos_x .+ sin_x ./ cot_r .* f_exp_2(cot_x, cot_r) ./ (2 .- f_exp(cot_x, cot_r))
 
     factor = 1 / sqrt(1 + pi / cot_rough^2)
     f_psi = @. ifelse(cos_psi == -1, 0.0, exp(-2 * sin_psi / (1 + cos_psi)))
 
-    cos_i_s0 = factor .* prime_zero_term(cos_i, sin_i, cot_i, cot_rough)
-    cos_e_s0 = factor .* prime_zero_term(cos_e, sin_e, cot_e, cot_rough)
+    # cos_i_s0 = factor .* prime_zero_term(cos_i, sin_i, cot_i, cot_rough)
+    # cos_e_s0 = factor .* prime_zero_term(cos_e, sin_e, cot_e, cot_rough)
+    cos_i_s0 = factor .* prime_term(cos_i, sin_i, cot_rough, 1.0, 0.0, 0.0, cot_i, 0.0, cos_i .< 2)
+    cos_e_s0 = factor .* prime_term(cos_e, sin_e, cot_rough, 1.0, 0.0, 0.0, cot_e, 0.0, cos_e .< 2)
 
     cos_i_s = zeros(size(cos_i))
-    cos_i_s += prime_term(cos_i, sin_i, cot_rough, cos_psi, sin_psi_div_2_sq, psi, cot_e, cot_i, cot_e, cot_i, ile)
-    cos_i_s += prime_term(cos_i, sin_i, cot_rough, ones(size(cos_psi)), -sin_psi_div_2_sq, psi, cot_i, cot_e, cot_i, cot_e, ige)
+    cos_i_s += prime_term(cos_i, sin_i, cot_rough, cos_psi, sin_psi_div_2_sq, psi, cot_e, cot_i, ile)
+    cos_i_s += prime_term(cos_i, sin_i, cot_rough, ones(size(cos_psi)), -sin_psi_div_2_sq, psi, cot_i, cot_e, ige)
     cos_i_s .*= factor
     cos_i_s = ifelse.(mask, cos_i, cos_i_s)
 
     cos_e_s = zeros(size(cos_e))
-    cos_e_s += prime_term(cos_e, sin_e, cot_rough, ones(size(cos_psi)), -sin_psi_div_2_sq, psi, cot_e, cot_i, cot_e, cot_i, ile)
-    cos_e_s += prime_term(cos_e, sin_e, cot_rough, cos_psi, sin_psi_div_2_sq, psi, cot_i, cot_e, cot_i, cot_e, ige)
+    cos_e_s += prime_term(cos_e, sin_e, cot_rough, ones(size(cos_psi)), -sin_psi_div_2_sq, psi, cot_e, cot_i, ile)
+    cos_e_s += prime_term(cos_e, sin_e, cot_rough, cos_psi, sin_psi_div_2_sq, psi, cot_i, cot_e, ige)
     cos_e_s .*= factor
     cos_e_s = ifelse.(mask, cos_e, cos_e_s)
 
