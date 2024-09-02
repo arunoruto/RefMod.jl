@@ -45,12 +45,6 @@ function amsa(
         p_mu_0 = function_p(mu_0, b, c)
         p_mu = function_p(mu, b, c)
         p = value_p(b, c)
-
-        println(sum(abs, p_g))
-        println(sum(abs, p_mu_0))
-        println(sum(abs, p_mu))
-        println(sum(abs, p))
-
     else
         throw(ArgumentError("Unsupported phase function parameters"))
     end
