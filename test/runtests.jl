@@ -1,9 +1,8 @@
-include("setup.jl")
+# include("setup.jl")
 
 using TestItemRunner
 
-@run_package_tests
-
+@run_package_tests verbose=true
 # @testset "RefMod Tests" begin
 #     # Building blocks
 #     # include("gradient.jl")
