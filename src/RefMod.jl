@@ -1,7 +1,9 @@
 module RefMod
 
-# include("hapke/imsa.jl")
+include("gradient.jl")
+include("hapke/amsa.jl")
 
-# export imsa
+export normals
+export amsa
 
 end

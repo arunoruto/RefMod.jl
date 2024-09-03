@@ -1,13 +1,17 @@
 include("setup.jl")
 
-@testset "RefMod Tests" begin
-    # Building blocks
-    include("gradient.jl")
-    include("h-function.jl")
-    include("phase-function.jl")
-    include("coefficients.jl")
-    include("roughness.jl")
+using TestItemRunner
 
-    # Models
-    include("amsa.jl")
-end
+@run_package_tests
+
+# @testset "RefMod Tests" begin
+#     # Building blocks
+#     # include("gradient.jl")
+#     # include("h-function.jl")
+#     # include("phase-function.jl")
+#     # include("coefficients.jl")
+#     # include("roughness.jl")
+
+#     # Models
+#     include("amsa.jl")
+# end
