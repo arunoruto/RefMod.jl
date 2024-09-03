@@ -1,6 +1,7 @@
 push!(LOAD_PATH, "../src/")
 
-using Documenter, RefMod
+using Documenter, DocumenterCitations, RefMod
 
-makedocs(sitename = "RefMod")
+bib = CitationBibliography(joinpath(@__DIR__, "src", "refs.bib"))
+makedocs(sitename = "RefMod", plugins = [bib])
 deploydocs(repo = "github.com/arunoruto/refmod.jl.git")
