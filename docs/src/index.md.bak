@@ -11,7 +11,7 @@ double_henyey_greenstein
 
 ## Legendre Helpers
 ```@docs
-coef_a
+coef_amicroscopic_roughness
 coef_b
 function_p
 value_p
