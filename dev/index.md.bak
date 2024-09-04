@@ -1,0 +1,33 @@
+# RefMod.jl
+
+## Helper Functions
+
+```@docs
+h_function
+h_function_1
+h_function_2
+double_henyey_greenstein
+```
+
+## Legendre Helpers
+```@docs
+coef_amicroscopic_roughness
+coef_b
+function_p
+value_p
+```
+
+## Roughness
+```@docs
+microscopic_roughness
+```
+
+## AMSA
+```@docs
+amsa
+```
+
+## References
+
+```@bibliography
+```
