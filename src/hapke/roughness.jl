@@ -10,6 +10,25 @@ function process_angle(vec_a::AbstractArray{Float64}, vec_b::AbstractArray{Float
     return cos_t, sin_t, cot_t, theta
 end
 
+@doc raw"""
+Calculates the microscopic roughness factor for the Hapke reflectance model.
+
+# Arguments
+- `roughness::Float64`: The roughness parameter.
+- `incidence_direction::AbstractArray{Float64}`: Array of incidence directions.
+- `emission_direction::AbstractArray{Float64}`: Array of emission directions.
+- `surface_orientation::AbstractArray{Float64}`: Array of surface orientations.
+
+# Returns
+- `s::AbstractArray{Float64}`: The microscopic roughness factor.
+- `cos_i_s::AbstractArray{Float64}`: The modified incidence-normal cosine value ``\mu_i'``.
+- `cos_e_s::AbstractArray{Float64}`: The modified emission-normal cosine value ``\mu'``.
+
+# Note
+- prime-zero terms: equations 48 and 49 in [hapke2002chapter3](@cite).
+- ``i < e``: equations 46 and 47 in [hapke2002chapter3](@cite).
+- ``i \ge e``: equations 50 and 51 in [hapke2002chapter3](@cite).
+"""
 function microscopic_roughness(
     roughness::Float64,
     incidence_direction::AbstractArray{Float64},
@@ -52,7 +71,6 @@ function microscopic_roughness(
     f_exp_2(x, y) = exp.(-x .^ 2 .* y^2 / pi)
     prime_term(cos_x, sin_x, cot_r, cos_psi, sin_psi_div_2_sq, psi, cot_a, cot_b, index) = ifelse.(
         index,
-        # cos_x + sin_x / cot_r * (cos_psi * f_exp_2(cot_a, cot_r) + sin_psi_div_2_sq * f_exp_2(cot_b, cot_r)) / (2 - f_exp(cot_a, cot_r) - psi / pi * f_exp(cot_b, cot_r)),
         begin
             term1 = cos_x
             term2 = sin_x / cot_r
@@ -63,14 +81,9 @@ function microscopic_roughness(
         end,
         0.0
     )
-    # prime_term(cos_x, sin_x, cot_r, cos_psi, sin_psi_div_2_sq, psi, cot_a, cot_b, index) = @. ifelse(index, cos_x + sin_x / cot_r * (cos_psi * f_exp_2(cot_a, cot_r) + sin_psi_div_2_sq * f_exp_2(cot_b, cot_r)) / (2 - f_exp(cot_a, cot_r) - psi / pi * f_exp(cot_b, cot_r)), 0.0)
-    # prime_zero_term(cos_x, sin_x, cot_x, cot_r) = cos_x .+ sin_x ./ cot_r .* f_exp_2(cot_x, cot_r) ./ (2 .- f_exp(cot_x, cot_r))
-
     factor = 1 / sqrt(1 + pi / cot_rough^2)
     f_psi = @. ifelse(cos_psi == -1, 0.0, exp(-2 * sin_psi / (1 + cos_psi)))
 
-    # cos_i_s0 = factor .* prime_zero_term(cos_i, sin_i, cot_i, cot_rough)
-    # cos_e_s0 = factor .* prime_zero_term(cos_e, sin_e, cot_e, cot_rough)
     cos_i_s0 = factor .* prime_term(cos_i, sin_i, cot_rough, 1.0, 0.0, 0.0, cot_i, 0.0, cos_i .< 2)
     cos_e_s0 = factor .* prime_term(cos_e, sin_e, cot_rough, 1.0, 0.0, 0.0, cot_e, 0.0, cos_e .< 2)
 

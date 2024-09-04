@@ -2,21 +2,42 @@ include("roughness.jl")
 include("functions.jl")
 include("legendre.jl")
 
+"""
+Calculates the reflectance using the AMSA (Advanced Modified Shadowing and Coherent Backscattering) model.
+
+# Arguments
+- `single_scattering_albedo`: The single scattering albedo.
+- `incidence_direction`: The incidence direction.
+- `emission_direction`: The emission direction.
+- `surface_orientation`: The surface orientation.
+- `phase_function`: The phase function.
+- `roughness::Float64=0.0`: The roughness.
+- `hs::Float64=0.0`: The shadowing parameter.
+- `bs0::Float64=0.0`: The shadowing parameter.
+- `hc::Float64=0.0`: The coherent backscattering parameter.
+- `bc0::Float64=0.0`: The coherent backscattering parameter.
+
+# Returns
+- `Array{Float64}`: An array representing the reflectance values.
+
+# Raises
+- `ArgumentError`: If the phase function parameters are unsupported.
+"""
 function amsa(
     single_scattering_albedo,
     incidence_direction,
     emission_direction,
     surface_orientation,
     phase_function,
-    roughness::Float64 = 0.0,
-    hs::Float64 = 0.0,
-    bs0::Float64 = 0.0,
-    hc::Float64 = 0.0,
-    bc0::Float64 = 0.0,
+    roughness::Float64=0.0,
+    hs::Float64=0.0,
+    bs0::Float64=0.0,
+    hc::Float64=0.0,
+    bc0::Float64=0.0,
 )
 
     along_dim = ndims(surface_orientation)
-    length_along(x) = sqrt.(sum(abs2, x, dims = along_dim))
+    length_along(x) = sqrt.(sum(abs2, x, dims=along_dim))
 
     # Normalize
     surface_orientation ./= length_along(surface_orientation)
