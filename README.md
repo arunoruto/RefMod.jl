@@ -9,6 +9,7 @@ Reflectance models implemented in julia
 - [ ] Write documentation
 - [x] Create a docs folder using [Documenter.jl](https://documenter.juliadocs.org/stable/)
 - [ ] Implement recommendations from [this](https://scientificcoder.com/automate-your-code-quality-in-julia) guide
+- [ ] Use [LsqFit.jl](https://github.com/JuliaNLSolvers/LsqFit.jl) to invert the model
 
 ## Help
 

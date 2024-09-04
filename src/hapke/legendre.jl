@@ -50,5 +50,5 @@ function value_p(
     a_n = coef_a(n)
     b_n = coef_b(b, c, n)
     # TODO: Change 1+ to 1-... Maybe?
-    return 1 + sum(@. a_n^2 * b_n)
+    return 1 + sum(a_n .^ 2 .* b_n)
 end

@@ -50,7 +50,20 @@ function microscopic_roughness(
 
     f_exp(x, y) = exp.(-x .* 2 * y / pi)
     f_exp_2(x, y) = exp.(-x .^ 2 .* y^2 / pi)
-    prime_term(cos_x, sin_x, cot_r, cos_psi, sin_psi_div_2_sq, psi, cot_a, cot_b, index) = @. ifelse(index, cos_x + sin_x / cot_r * (cos_psi * f_exp_2(cot_a, cot_r) + sin_psi_div_2_sq * f_exp_2(cot_b, cot_r)) / (2 - f_exp(cot_a, cot_r) - psi / pi * f_exp(cot_b, cot_r)), 0.0)
+    prime_term(cos_x, sin_x, cot_r, cos_psi, sin_psi_div_2_sq, psi, cot_a, cot_b, index) = ifelse.(
+        index,
+        # cos_x + sin_x / cot_r * (cos_psi * f_exp_2(cot_a, cot_r) + sin_psi_div_2_sq * f_exp_2(cot_b, cot_r)) / (2 - f_exp(cot_a, cot_r) - psi / pi * f_exp(cot_b, cot_r)),
+        begin
+            term1 = cos_x
+            term2 = sin_x / cot_r
+            term3 = cos_psi .* f_exp_2(cot_a, cot_r)
+            term4 = sin_psi_div_2_sq .* f_exp_2(cot_b, cot_r)
+            term5 = 2 .- f_exp(cot_a, cot_r) .- psi .* f_exp(cot_b, cot_r) / pi
+            term1 + term2 .* (term3 .+ term4) ./ term5
+        end,
+        0.0
+    )
+    # prime_term(cos_x, sin_x, cot_r, cos_psi, sin_psi_div_2_sq, psi, cot_a, cot_b, index) = @. ifelse(index, cos_x + sin_x / cot_r * (cos_psi * f_exp_2(cot_a, cot_r) + sin_psi_div_2_sq * f_exp_2(cot_b, cot_r)) / (2 - f_exp(cot_a, cot_r) - psi / pi * f_exp(cot_b, cot_r)), 0.0)
     # prime_zero_term(cos_x, sin_x, cot_x, cot_r) = cos_x .+ sin_x ./ cot_r .* f_exp_2(cot_x, cot_r) ./ (2 .- f_exp(cot_x, cot_r))
 
     factor = 1 / sqrt(1 + pi / cot_rough^2)

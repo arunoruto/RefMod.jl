@@ -24,8 +24,9 @@ function h_function_1(
     x::Union{AbstractFloat,AbstractArray{<:AbstractFloat}},
     w::Union{AbstractFloat,AbstractArray{<:AbstractFloat}}
 )
-    gamma = sqrt.(1 .- w)
-    return (1 .+ 2 .* x) ./ (1 .+ 2 .* x .* gamma)
+    gamma = @. sqrt(1 - w)
+    return @. (1 + 2 * x) / (1 + 2 * x * gamma)
+    # return (1 .+ 2 .* x) ./ (1 .+ 2 .* x .* gamma)
 end
 
 function h_function_2(
